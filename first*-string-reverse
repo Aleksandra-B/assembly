@@ -1,0 +1,56 @@
+.486
+.model flat, stdcall
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+  s db "00000", 0 
+  len dd ?
+  s1 db 200 dup(?)
+ 
+.CODE
+
+main:
+  mov ecx, 0
+  mov esi, offset s
+  
+start:  
+  cmp byte ptr [esi], 0
+  jz ezzit 
+  inc ecx 
+  inc esi
+  jmp start
+ 
+ezzit: 
+  mov len , ecx 
+  mov esi, offset s
+  mov edi, offset s1
+  mov ecx, len
+  
+
+do: dec ecx
+    jl ehzit     
+    mov al, byte ptr s[ecx]
+    cmp al, '0'
+    je do 
+   
+   
+start3:   
+   mov dl ,  byte ptr s[ecx*1]
+   mov [edi], dl 
+   add edi , type s
+   dec ecx
+   jl ezit
+   jmp start3 
+  
+ezit:  
+
+   add edi , 1
+   mov byte ptr [edi], 0    
+   call exit
+  
+ ehzit:
+   mov byte ptr [edi], '0'
+   jmp ezit 
+
+END main
