@@ -1,0 +1,132 @@
+
+.486
+.model flat, stdcall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+array dd 28 ,-70 ,154 , 98 
+len EQU 4
+
+a dd ?
+b dd ?
+
+.CODE
+main: 
+  mov ecx, len    
+  mov esi ,offset array
+   
+do:
+ dec ecx  
+ jz ezit
+ mov eax, [esi]  
+ cmp eax, 0  
+ jge do8  
+ neg eax 
+
+do8: 
+
+ add esi, 4
+ mov ebx, [esi] ; second number in ebx 
+ cmp ebx, 0 
+ jge do1
+ 
+ neg ebx 
+do1:
+  call gcd  ; first call gcd: to find gcd of fst snd number
+ezzit:   
+  dec ecx  
+  jz ezit 
+  add esi , 4   ; find gcd wit result and next number from array 
+  mov ebx, [esi]
+  cmp ebx, 0
+  jl do6
+  call gcd 
+  jmp ezzit
+do6: 
+  neg ebx 
+  call gcd 
+  
+ezit:  
+  call exit
+  
+gcd: 
+  xor edx, edx
+  div ebx
+  mov eax, ebx
+  mov ebx, edx   ;find gcd of first and second number
+  test ebx, ebx 
+  jnz gcd 
+  ret 
+  
+END main
+
+;second 
+.486
+.Model Flat, StdCall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+;array db 0 ,0 ,0 
+;array db 1, 2 ,4   ; 2+4+16=22
+array db 0, 2 ,4 ; 3^0+ 3^2+ 3^4= 9+81
+a dd 3
+len EQU 3
+res dd ?
+.code
+main: 
+mov esi , offset array
+mov ecx , len
+mov res, 0 
+
+
+begin:
+  mov eax, a
+  dec ecx
+  jl stop
+  mov dl, [esi]
+  add esi , 1
+    
+power:
+cmp dl, 0
+jz begin1
+call power1 
+jmp stop1   
+
+begin1:
+mov eax, 0
+jmp stop1
+
+stop1 :
+add res, eax 
+jmp begin 
+
+stop:
+       call exit
+
+power1:      
+  test dl, dl
+  jz return1
+  mov ebx, eax   
+do:
+   dec dl
+   test dl, dl
+   jz return 
+   imul eax, ebx 
+   jmp do    
+  
+return:  
+mov ebx, ebx   
+jmp stop1 
+  
+return1:
+mov ebx, 1
+ 
+ ret 
+end main
+ 
