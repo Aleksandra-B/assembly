@@ -1,0 +1,99 @@
+;first program
+
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+a dd 15
+b dd  12
+
+
+.CODE
+main:
+  mov eax, a
+  mul b
+  mov ecx, 17
+  div ecx
+; остаток в edx 
+       call exit
+end main
+
+;second 
+
+.DATA
+
+a dd 55555555h
+b dd 3
+d dd 1
+e dd ?
+ 
+.CODE
+main:
+
+mov eax, a
+mul b
+add eax , d
+mov e, eax 
+
+       call exit
+end main
+;third
+
+
+.DATA
+x1 dd 43
+x2 dd 32
+y1 dd 24
+y2 dd 13
+s dd ?
+
+.CODE
+main:
+mov eax , x2
+sub eax , x1
+mov ebx, y2
+sub ebx, y1
+imul  ebx
+mov s, ebx 
+
+
+       call exit
+end main
+;fourth
+
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+
+a dd 17
+b dd 2
+r dd 3 
+
+
+.CODE
+main:
+  mov eax, a
+  xor edx, edx 
+  div b
+  mov cl, dl
+  mov eax , a
+  xor edx , edx 
+  div r
+  mov ah , dl
+  mov al, cl
+  
+ 
+
+; остаток в edx 
+
+       call exit
+end main
+
+
