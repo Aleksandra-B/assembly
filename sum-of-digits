@@ -1,0 +1,28 @@
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+             ;номер 4 программа считает сууму цифр переменной 
+a dd 25
+sum db ?          
+.CODE
+main:
+mov eax, a
+mov ebx ,10
+mov cl, sum
+
+do:
+
+  cmp eax, 0
+  jz ezzit
+  cdq 
+  div ebx
+  add cl, dl
+  jmp do
+
+  ezzit:
+       call exit
+end main 
