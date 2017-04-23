@@ -1,0 +1,62 @@
+.486
+.model flat, stdcall
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+  ar1 dd 1, 2, 3, 4
+  LEN1 EQU 4
+  k1 dd 2
+  b1 dd -3
+
+
+.CODE
+main:
+  mov edx, 0FFFFFFFFH
+
+; пересчет первого массива
+  mov eax, k1
+  mov ebx, b1
+  mov ecx, LEN1
+  mov esi, offset ar1
+  call compute_array
+
+  call exit
+
+; Те регистры, которые не задействованы для
+; передачи входных или выходных данных не должны
+; изменяться процедурой  
+  
+;----------------------------------
+; Процедура пересчитывет массив по формуле 
+;   ai' = k*ai + b
+; Входные данные:
+;   eax - k
+;   ebx - b
+;   ecx - длина массива
+;   esi - адрес массива 4-байтных знаковых чисел
+; Выходные данные:
+;   нет
+compute_array:
+  push edx  ; спасаю используемый регистр
+  push eax  ; перемещаю коэффициент k в стек
+  
+start:
+  dec ecx
+  jl thats_all
+  
+  mov eax, [esi + 4*ecx]
+  imul dword ptr [esp]   ; k - в стеке!
+  add eax, ebx
+  mov [esi + 4*ecx], eax
+  
+  jmp start
+
+thats_all:  
+  
+  add esp, 4  ; убираю k из стека
+  
+  pop edx   ; восстанавливаю edx
+  ret
+  
+END main
