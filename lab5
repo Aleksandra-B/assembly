@@ -1,0 +1,160 @@
+;5.1
+.486
+.model flat, stdcall
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+  s db "helLo", 0  ;1-st to make proper string 
+  
+.CODE   
+main:
+  mov esi, offset s
+
+  
+start:  
+  cmp byte ptr [esi], 0
+  je ezzit   
+  cmp byte ptr [esi], 97
+  jb do
+do1:  
+  mov al, [esi]
+  sub al, 32
+  mov [esi], al  ; sub byte ptr [esi], 32 
+do: 
+  inc esi
+
+   cmp byte ptr [esi], 0
+   je ezzit
+   cmp byte ptr [esi],97
+   ja do
+   mov eax, [esi]
+   add eax, 32
+   mov [esi], eax 
+   jmp do
+    
+  
+ezzit: 
+  call exit
+END main
+
+;5.2
+.486
+.model flat, stdcall
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+  s db "wow", 0 
+  res db ?
+  len dd ?
+.CODE
+main:
+  mov ecx, 0
+  mov esi, offset s
+  
+start:  
+  cmp byte ptr [esi], 0
+  je ezzit 
+  inc ecx 
+  inc esi
+  jmp start
+ 
+ezzit: 
+  mov len , ecx 
+  mov esi , offset s
+  mov edi, offset s
+  mov ecx, len 
+  
+start2:  
+  cmp byte ptr [edi], 0
+  je gotoend  
+  dec ecx
+  mov dl, byte ptr s[ecx] 
+  mov bl, [edi] 
+  cmp bl ,dl
+  jz do
+  mov dl, 0
+  jmp ezit 
+  
+do:
+  inc edi 
+  jmp start2    
+  
+gotoend: 
+   mov bl ,1
+
+ezit:
+  mov res, bl
+  call exit
+END main
+
+;5.3
+
+.486
+.model flat, stdcall
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+  s db "112211", 0 
+  len dd ?
+  res db ?
+.CODE
+
+main:
+  mov ecx, 0
+  mov esi, offset s
+  
+start:  
+  cmp byte ptr [esi], 0
+  je ezzit 
+  inc ecx 
+  inc esi
+  jmp start
+ 
+ezzit: 
+  mov len , ecx 
+  mov esi , offset s
+  mov edi, offset s
+  mov ecx, len 
+  
+start2:  
+  cmp byte ptr [edi], 0
+  je move1
+  dec ecx
+  mov dl, byte ptr s[ecx] 
+  mov bl, [edi] 
+  cmp bl ,dl
+  jz do
+  ja do1
+  sub dl , 32
+  cmp bl, dl 
+  jz do
+  
+mov0:
+  mov ecx, 0
+  jmp ezit 
+  
+do:
+  inc edi 
+  inc esi
+  jmp start2    
+  
+do1: 
+  sub bl,32
+  cmp dl, bl 
+  jz do
+  jmp mov0
+    
+ 
+move1:
+  mov ecx, 1
+  jmp ezit
+
+ezit: 
+  mov res, cl  
+  
+  call exit
+END main
+
