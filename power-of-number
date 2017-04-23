@@ -1,0 +1,43 @@
+.486
+.Model Flat, StdCall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a db 3
+b dd -4
+
+.code
+main: 
+mov dl, a
+mov eax, b
+cmp dl, 0
+jnz begin
+mov eax, 0
+jmp stop
+            
+begin:      ; in eax result- power of number 
+  test dl, dl
+  jz return1
+  mov ebx, eax 
+  
+do:
+   dec dl
+   test dl, dl
+   jz return 
+   imul eax, ebx 
+   jmp do    
+  
+return:  
+mov ebx, ebx   
+jmp stop   
+return1:
+ mov ebx, 1
+  
+stop :
+
+       call exit
+end main
