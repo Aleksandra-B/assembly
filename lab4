@@ -1,0 +1,330 @@
+;4.1
+.486
+.Model Flat, StdCall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+array dw 1 ,2 ,3 ,4 ,5
+len EQU 5
+b dd ?
+d dd ?
+
+.code
+main: 
+lea ebx, array  ; lea edi, array + 2*ecx - 2
+mov ecx , len
+mov eax, 1
+mov edx,0 
+
+begin:
+  mul dword ptr [ebx]
+  add ebx, 2 ; type array
+  loop begin
+  mov b,eax
+  
+begin1:
+  lea ebx, array
+  mov ecx ,len 
+begin2:
+  add edx, dword ptr [ebx]
+  add ebx, 2 
+  loop begin2
+  mov d,edx 
+  
+       call exit
+end main
+
+
+
+;4.2
+.486
+.Model Flat, StdCall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+a db 5
+arr dd 13 dup(?) 
+  
+.CODE
+main:
+  mov esi, offset arr
+  mov dword ptr [esi], 1
+  add esi, 4 
+  mov ax , 1
+  mov ebx , 1
+
+start:
+  cmp bl, a
+  jz stop  
+
+fact:
+   mul ebx
+   inc ebx
+   mov [esi], eax
+   add esi ,4
+   jmp start
+
+stop:
+  call exit
+END main
+
+
+
+;4.3
+
+.486
+.model flat, stdcall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+array dw 1804 ,1805 ,2104 ,1900 ,2000
+len EQU 5
+array1 db len dup(?)
+
+.CODE
+main: 
+  mov cl , len
+  mov esi, offset array
+  mov edi ,offset array1
+ 
+  
+do:
+
+  dec cl
+  jl ezzit
+  mov ax, [esi]
+  mov bx, 4
+  mov dx, 0
+  div bx 
+  cmp dl, 0  ; делим на 4 и смотрим : остаток равен или нет 0
+             ; если равен идем по тесту1 и делим на 100. иначе делим на 400
+  jnz add0
+
+  mov eax, [esi]
+  mov bx, 100
+  mov dx, 0
+  div bx
+  cmp  dl, 0
+  jnz add1   
+   
+   mov eax, [esi]
+   mov bx,400
+   mov dx, 0
+   div bx
+   cmp dl, 0
+   jz add1
+   
+add0:
+  mov byte ptr [edi],0
+  jmp next
+  
+add1: 
+  mov byte ptr [edi],1
+  
+next:
+  add esi, 2
+  add edi, 1
+  jmp do  
+  
+ezzit:  
+  call exit
+END main
+;4.4
+
+.486
+.Model Flat, StdCall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+array dw 64 ,-21 ,13 ,41 ,51
+len EQU 5
+array1 db len dup(?)
+b db 10
+
+.code
+main: 
+mov esi , offset array
+mov edi,offset array1
+mov ecx , len
+mov bl , 10
+
+
+
+begin:
+  dec ecx
+  jl stop
+  mov ax, [esi]
+  cmp ax, 0
+  jge do_div
+  neg ax
+do_div: 
+ 
+  div bl 
+  mov [edi], ah 
+  add esi , type array
+  add edi , type array1
+  jmp begin
+
+  
+stop :
+
+       call exit
+end main
+
+;4.5
+
+.486
+.model flat, stdcall
+  ;  реверсирование списка
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+array dd 6400 ,2100 ,1334 ,4112 ,5112
+len EQU 5
+array1 dd len dup(?)
+
+.CODE
+main: 
+  mov ecx, len
+  mov edi ,offset array1
+   
+do:
+ dec ecx
+ jl ezzit
+ 
+ mov eax, dword ptr array[ecx*4]
+ mov [edi], eax 
+ add edi , type array1
+ jmp do 
+   
+
+ezzit:  
+  call exit
+END main
+
+;lab4.6
+
+.486
+.model flat, stdcall
+  ;кратность числу к данного списка. переписать кратные чиссла
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+array dd 64 ,21 ,13 ,39 ,51
+len EQU 5
+len1 dd 0
+array1 dd len dup(?)
+k db 3
+
+.CODE
+main: 
+  mov ecx, len
+  mov esi, offset array
+  mov edi ,offset array1
+  mov bx, k
+
+ 
+  
+do:
+ dec ecx
+ jl ezzit
+ 
+ mov eax, [esi]
+ cdq
+ idiv bx
+ cmp edx, 0
+ jnz next
+ 
+  mov eax, [esi]
+  mov [edi], eax
+  add edi, type array1  
+  inc len1
+  
+next:  
+  add  esi, type array
+  jmp do   
+
+ezzit:  
+  call exit
+END main
+
+;4.7
+
+.486
+.Model Flat, StdCall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+b dw ?
+a0 db 5
+d db  -1
+len equ 5
+len2 equ 5
+arr db len dup(?) 
+arr2 dw len2 dup(?)
+
+.CODE
+main:
+  mov al, a0
+  mov cl, len 
+  lea esi, arr 
+
+start:
+  dec cl
+  jl stop  
+
+  mov [esi], al 
+  add esi, 4
+  add al, d
+  jmp start
+
+stop:
+  mov edi , offset arr2
+  mov cl, len
+  lea esi , arr
+  mov ebx, 1
+
+do1:
+  dec cl
+  jl stop1
+  
+  
+fact: 
+  mov al ,1
+  mov bl, [esi]
+start1:
+  mul bl
+  dec bl
+  cmp bl, 1
+  jne start1
+  jmp finish
+
+finish:  
+  mov [edi], ax
+  add edi, 2
+  add esi , 1  
+  jmp do1
+  
+stop1:  
+  call exit
+END main
