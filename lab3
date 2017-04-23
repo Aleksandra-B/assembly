@@ -1,0 +1,192 @@
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 13 
+b dd 24
+n db 3            ; обнулить младший байт 
+                  ; обнулить нужное число младших байтов
+.CODE
+main:
+mov cl, n
+mov eax, a
+mov ebx, b
+and eax, 0fffffffeh
+; shr eax, 1
+; shl eax, 1
+shr ebx, cl
+shl ebx, cl
+
+       call exit
+end main 
+;3.2
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+              ; задача номер 4
+a dd 38 ;100110      
+b dd 39  ;100111    
+k dd ?        
+        
+		
+		
+.CODE
+main:
+mov eax, a
+mov ebx, b
+mov k, ecx
+xor eax, ebx 
+mov ecx,0  
+
+do: 
+  cmp eax, 0
+  jz ezzit 
+  test eax, 1
+  jne do1
+  shr eax, 1
+  jmp do
+do1: 
+  shr eax ,1
+  inc ecx
+  jmp do
+
+ezzit:
+   
+       call exit
+end main 
+
+;3.3
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 8 
+          
+ ;номер 2 change digits even and odd
+.CODE
+main:
+mov eax, a
+shl eax,1
+and eax , 10101010
+mov ebx,a
+shr ebx, 1
+and ebx, 01010101
+or eax,ebx
+
+       call exit
+end main 
+;3.4
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 1277773 
+b dd  822221    
+d db 1      
+ 
+.CODE
+main:
+mov eax, a
+mov cl, d
+
+find:
+cmp eax,b
+jb exxit
+shl eax, cl
+shr eax, cl
+inc cl 
+jmp find
+
+exxit:
+       call exit
+end main 
+
+;3.6
+.486
+.Model Flat, StdCall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 3 
+b dd 17 
+t dd 1 ;counter
+s dd ?      
+          ;номер 6 сумма всех полных квадратов, лежащих в интервале
+.CODE
+main:
+mov eax, t
+mov ebx, 0
+
+
+todo1: 
+     mov eax, t
+     mul t
+	 cmp eax, a 
+	 jb  do1  
+	 cmp eax,b
+	 ja do2
+	 add ebx,eax 
+
+do1: 
+     inc t
+	 jmp todo1
+
+do2:
+     mov s, ebx
+     jmp ezzit
+
+ezzit:
+       call exit
+end main
+
+;gcd22
+
+
+
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 28 
+b dd 70
+
+.CODE
+main:  ; in eax is gcd
+mov eax, a
+mov ebx, b
+
+do:
+xor edx, edx
+div ebx
+mov eax, ebx
+mov ebx, edx
+test ebx, ebx
+jnz do 
+
+
+       call exit
+end main 
