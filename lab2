@@ -1,0 +1,365 @@
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 34
+b dd 23
+.CODE
+main:
+
+clc
+mov eax , a
+mov edx , b
+cmp eax,edx
+jg num1_greater 
+mov ebx, edx
+jmp exit
+num1_greater:
+mov ebx , eax 
+       call exit
+end main
+
+
+;2 fibonacci 
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a db 3 ; number of neede numbers fibonacci 
+.CODE
+main:
+mov eax, 1 
+mov ebx, 1
+mov cl , 1; counter 
+cmp a, 1
+
+jz exxit
+cmp a, 0
+jz exxit
+
+
+fibonacci:
+add eax, ebx
+add cl, 1
+
+cmp cl, a
+jz exxit
+jmp fibonacci 
+
+exxit:
+       call exit
+end main 
+
+;gcd
+
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 28
+b dd 70 
+
+.CODE
+main:
+xor edx, edx
+mov eax, a
+mov ebx, b
+
+do:
+ div ebx
+ cmp edx, 0
+ je ezzit
+ mov eax, ebx
+ mov ebx, edx 
+ jmp do
+ 
+ezzit:
+  
+       call exit
+end main 
+
+;3
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+
+a dd 15
+b dd  12
+
+
+.CODE
+main:
+  mov eax, a
+  mul b
+  mov ecx, 17
+  div ecx
+
+; остаток в edx 
+
+       call exit
+end main
+
+;4
+
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+
+a dd 15
+b dd  12
+d dd 3 
+e dd 4
+
+;a*b - ( d mod e)
+;беззнаковая программа
+.CODE
+main:
+
+  mov eax, d
+  mov edx,0 
+  div e
+  mov ecx,edx
+  mov eax, a
+  mul b
+  sub eax,ecx 
+  
+       call exit
+end main
+;5
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+
+a dd 15
+b dd  12
+d dd -3 
+e dd -4
+
+;a*b - ( d mod e) 
+;знаковая программа
+
+
+.CODE
+main:
+
+  mov eax, d
+  cdq 
+  idiv e
+  mov ecx,edx
+  mov eax, a
+  imul b
+  sub eax,ecx 
+  
+       call exit
+end main
+
+;6
+
+.486
+.Model Flat, StdCall
+
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+
+a dd 127
+b dd 5
+res1 db ?
+res2 db ?
+res3 db ?
+              ; остатки от деления отр на пол
+			  ; пол на отр
+			  ; отр на  отр 
+	; ЗАДАЧА НОМЕР 7		  
+			  
+.CODE
+main:
+  mov eax, a
+  mov edx,0 
+  neg eax 
+  xor edx, edx 
+  mov ebx , b
+  cdq
+  idiv ebx
+  mov res1, dl ;
+  mov eax,a
+  xor edx,edx
+  mov ebx,b
+  neg ebx
+  idiv ebx
+  mov res2, dl ;
+  mov eax,a
+  mov edx, 0
+  neg eax
+  xor edx ,edx
+  mov ebx,b
+  neg ebx
+  cdq
+  idiv ebx
+  mov res3, dl
+
+       call exit
+end main
+
+
+;7
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+
+a dd 1
+b dd 0
+
+
+.CODE
+main:
+  mov eax, 7
+  imul a
+  mov ecx,eax
+  
+;  mov eax, a
+;  imul a
+;  mov edx, eax  ; проверка принадлежности программы  функции с точкой
+;  imul edx, 5
+ 
+  mov eax, 5
+  imul a
+  imul a
+ 
+  sub eax,ecx 
+  add eax, 2 
+  
+  cmp edx, b
+  je Equal
+  mov al, 0
+  jmp exxit
+  
+Equal: 
+  mov al, 1
+   
+exxit:
+  call exit
+end main
+
+;max of 2 numbers 
+
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 34           ; поиск максисмума из двух чисел
+b dd 23
+res dd ?
+
+.CODE
+main:
+
+mov eax , a
+mov edx , b
+cmp eax,edx
+jg num1_greater 
+mov res, edx
+jmp exxit
+num1_greater:
+mov res, eax 
+exxit:
+       call exit
+end main
+
+
+; inverse
+
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dw 278   ;инверсия числа в случае 2 байтов 
+
+.CODE
+main:
+mov ax, a
+not ax
+inc ax 
+mov bx, ax 
+       call exit
+end main
+
+;8 .486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a db 13 
+            ;инверсия числа в случае 1 байта
+.CODE
+main:
+mov al, a
+not al
+not ah
+inc al 
+
+       call exit
+end main
+
+;9
+.486
+.Model Flat, StdCall
+
+INCLUDE stdlib.inc
+INCLUDELIB msvcrt.lib 
+
+.DATA
+
+a dd 2147000000 
+                       ;инверсия числа в случае 4 байта
+.CODE
+main:
+mov eax, a
+not eax
+inc eax 
+       call exit
+end main
+
+
+
+
+
