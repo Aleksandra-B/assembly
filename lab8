@@ -1,0 +1,124 @@
+.486
+.model flat, stdcall
+INCLUDE stdlib.inc
+
+; Функции ввода-вывода
+INCLUDE stdio.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+  f_mess db "Enter number: ", 0
+  f_ret db 13, 10, 0
+  
+  num dd ?
+  res dd ?
+
+  f_in db "%d", 0
+  f_out db "%d+10= %d",13, 10, 0
+
+.CODE
+main:
+  push offset f_mess
+  call printf
+  add esp, 4
+
+  push offset num
+  push offset f_in
+  call scanf 
+  add esp, 8
+
+  mov eax, num
+  add eax, 10
+  mov res, eax
+
+  push offset f_ret
+  call printf
+  add esp, 4
+  
+  push res
+  push num
+  push offset f_out
+  call printf 
+  add esp, 12
+
+call exit
+  
+END main
+	  
+
+;programm to add 10 to entered number
+
+;2programm to find gcd of 2 entered numbers
+.486
+.model flat, stdcall
+INCLUDE stdlib.inc
+
+; Функции ввода-вывода
+INCLUDE stdio.inc
+INCLUDELIB msvcrt.lib
+
+.DATA
+  f_mess db "Enter numbers: ", 0
+  f_ret db 13, 10, 0
+  
+  num dd ?
+  num1 dd ?
+  res dd ?
+
+  f_in db "%d%d", 0
+  f_out db "%d gcd %d = %d",13, 10, 0
+
+.CODE
+main:
+  push offset f_mess
+  call printf
+  add esp, 4
+
+  push offset num
+  push offset num1
+  push offset f_in
+  call scanf 
+  add esp, 12
+
+  mov eax, num
+  cmp eax, 0
+  jz do
+  mov ebx, num1
+  cmp ebx, 0
+  jz do1
+  call gcd 
+  mov res, eax 
+  jmp next
+do: mov eax, num1
+    mov res, eax 
+    jmp next
+do1: mov eax, num 
+     mov res, eax 
+	
+next:
+  push offset f_ret
+  call printf
+  add esp, 4
+  
+  push res
+  push num
+  push num1 
+  push offset f_out
+  call printf 
+  add esp, 16
+
+call exit
+  
+	  
+gcd: 
+  xor edx, edx
+  div ebx
+  mov eax, ebx
+  mov ebx, edx   ;find gcd of first and second number
+  test ebx, ebx 
+  jnz gcd 
+  ret 
+  
+END main
+
+
