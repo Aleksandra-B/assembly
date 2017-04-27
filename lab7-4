@@ -1,4 +1,3 @@
-
 .486
 .model flat, stdcall
 INCLUDE stdlib.inc
@@ -9,10 +8,9 @@ LEN1 EQU 4
 v1 dw 1, 7, 3, 4
 v2 dw LEN1 dup(?)
 v3 dw LEN1 dup(?)
-
-
+l2 dd ?
+l3 dd ?
 a1 dw 5
-
 
 .CODE
 main:
@@ -24,36 +22,48 @@ push dword ptr LEN1
 call compute_array
 add esp, 20 
 
+mov l2, eax
+mov l3, ebx
+
 call exit 
 
 compute_array:
 push ebp
 mov ebp, esp
 
-pusha
-mov ecx, [ebp+8] ; put in ecx len
-mov esi, [ebp+12] ;put in esi first array
-mov edx, [ebp+16] ;put in edx snd array
-mov edi, [ebp+20] ;in eax 3 array
-mov ebx, [ebp+ 24]
+;mov ecx, [ebp+8] ; put in ecx len
+;mov esi, [ebp+12] ;put in esi first array
+;mov edx, [ebp+16] ;put in edx snd array
+;mov edi, [ebp+20] ;in edi 3 array
+mov ecx, [ebp+8]
+xor ebx, ebx 
+xor eax, eax
+xor edx, edx
+  
 
 start:
 dec ecx
 jl stop 
 
-xor eax, eax
-mov ax , [esi+2*ecx]
-cmp ax, bx
-jae putsecond
-mov [edx+ 2*ecx], ax
-jmp start
+mov esi, [ebp+12]
+mov dx, [esi+2*ecx]
+cmp dx, [ebp+24]
 
+jae putsecond 
+ inc  ebx 
+ mov esi, [ebp+16]
+ mov [esi+2*ebx], dx  
+ jmp start 
+ 
 putsecond:
-  mov [edi +2*ecx], ax 
-  jmp start 
+ inc eax 
+ mov esi, [ebp+20]
+ mov [esi+2*eax ], dx  
+ jmp start
+
 stop: 
-popa
-pop ebp
-ret
+  
+  pop ebp
+  ret
 
 END main
